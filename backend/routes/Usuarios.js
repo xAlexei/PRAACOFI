@@ -8,7 +8,8 @@ router.post('/', async(req, res)=>{
 
         usuario = new UserModel({
             nombre: req.body.nombre,
-            apellido: req.body.apellido,
+            apellidoP: req.body.apellidoP,
+            apellidoM: req.body.apellidoM,
             correo: req.body.correo,
             password: req.body.password,
             type: req.body.password
@@ -31,7 +32,8 @@ router.put('/', async (req, res)=>{
 
     const user = await UsuarioModel.findByIdAndUpdate(req.params.id,{
         nombre: req.body.nombre,
-        apellido: req.body.apellido,
+        apellidoP: req.body.apellidoP,
+        apellidoM: req.body.apellidoM,
         correo: req.body.correo,
         password: req.body.password,
         type: req.body.type
@@ -39,7 +41,7 @@ router.put('/', async (req, res)=>{
     {
         new: true
     })
-    if(!alumno){
+    if(!user){
         return res.status(404).send('No existe');
     }
     res.status(204).send()
@@ -48,7 +50,7 @@ router.put('/', async (req, res)=>{
 router.delete('/:id', async (req, res) =>{
     const user = await UsuarioModel.findOneAndDelete(req.params.id)
 
-    if(!alumno){
+    if(!user){
         return res.status(404).send('El usuario con este ID no existe');
     }
     res.status(200).send('El usuario ha sido eliminado');
