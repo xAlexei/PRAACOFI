@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const UsuarioModel = require('../models/UsuarioModel');
 const UserModel = require('../models/UsuarioModel');
 
 router.post('/', async(req, res)=>{
@@ -12,7 +11,7 @@ router.post('/', async(req, res)=>{
             apellidoM: req.body.apellidoM,
             correo: req.body.correo,
             password: req.body.password,
-            type: req.body.password
+            type: req.body.type
         })
         const result = await usuario.save();
         res.status(201).send('Usuario Registrado');
