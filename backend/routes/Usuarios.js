@@ -15,11 +15,7 @@ router.post('/', async(req, res)=>{
             apellidoP: req.body.apellidoP,
             apellidoM: req.body.apellidoM,
             correo: req.body.correo,
-<<<<<<< HEAD
-        
-=======
             password:passcifrado,
->>>>>>> be9bdab35973c2bf20068cb5d023d181ef2a8826
             type: req.body.type
         })
         const result = await usuario.save();
