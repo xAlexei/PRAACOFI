@@ -12,7 +12,7 @@ router.post('/', async(req, res)=>{
             motivo: req.body.motivo,
             RFC: req.body.RFC
         })
-        const result = await citas.savae();
+        const result = await citas.save();
         res.status(201).send('Citas Rigistrada');
 
 });

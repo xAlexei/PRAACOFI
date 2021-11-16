@@ -2,14 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const citas = require('./routes/Citas');
-const user = require('./routes/Usuarios');
+const citas = require('./routes/Citas.js');
+const user = require('./routes/Usuarios.js');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/citas', citas);
-app.use('/ai/usuarios',user);
+app.use('/api/usuarios',user);
 
 //Puerto
 
@@ -19,7 +19,7 @@ app.listen(3000, ()=>{
 
 //Conexion
 
-mongoose.connect('',{useNewUrlParser:true,useUnifiedTopology: true, useFindAndModify: false, useCreateIndex:true})
+mongoose.connect('mongodb+srv://xAlexei:Palacios12@cluster0.66sqe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{useNewUrlParser:true,useUnifiedTopology: true, useFindAndModify: false, useCreateIndex:true})
 .then(()=>console.log('Conectado'))
 .catch(()=>console.log('No se pudo establecer la conexion'));
 
