@@ -16,6 +16,9 @@ router.post('/', async(req, res)=>{
         })
         const result = await usuario.save();
         res.status(201).send('Usuario Registrado');
+
+
+        
 });
 
 router.get('/', async(req, res)=>{
