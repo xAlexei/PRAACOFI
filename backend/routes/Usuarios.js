@@ -20,7 +20,7 @@ router.post('/', async(req, res)=>{
 
 //LLAMADA DE DATOS 
 router.get('/', async(req, res)=>{
-    await UsuarioModel.find()
+    await UserModel.find()
     .then(result =>{
         if(!result) res.json({ success: false, result: 'No se encuentran registros'});
 
@@ -32,7 +32,7 @@ router.get('/', async(req, res)=>{
 router.put('/', async (req, res)=>{
 
 
-    const user = await UsuarioModel.findByIdAndUpdate(req.params.id,{
+    const user = await UserModel.findByIdAndUpdate(req.params.id,{
         nombre: req.body.nombre,
         apellidoP: req.body.apellidoP,
         apellidoM: req.body.apellidoM,
@@ -50,7 +50,7 @@ router.put('/', async (req, res)=>{
 });
   //borrar
 router.delete('/:id', async (req, res) =>{
-    const user = await UsuarioModel.findOneAndDelete(req.params.id)
+    const user = await UserModel.findOneAndDelete(req.params.id)
 
     if(!user){
         return res.status(404).send('El usuario con este ID no existe');
