@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
         errors: [
           {
             title: 'Bad Request',
-            detail: 'Email must be a valid email address',
+            detail: 'Tienes que poner una direccion de Email valida',
           },
         ],
       });
@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
         errors: [
           {
             title: 'Bad Request',
-            detail: 'Password must be a string',
+            detail: 'La contrasela debe contener caracteres',
           },
         ],
       });
@@ -99,16 +99,16 @@ router.post('/login', async (req, res) => {
         secure: process.env.NODE_ENV === 'production',
       })
       .json({
-        title: 'Login Successful',
-        detail: 'Successfully validated user credentials',
+        title: 'Inicio de sesion exitoso',
+        detail: 'Credenciales Validadas',
         csrfToken: session.csrfToken,
       });
   } catch (err) {
     res.status(401).json({
       errors: [
         {
-          title: 'Invalid Credentials',
-          detail: 'Check email and password combination',
+          title: 'Credenciales Incorrectas',
+          detail: 'Verifica el email y que la contrasela sean correctas',
           errorMessage: err.message,
         },
       ],
@@ -122,16 +122,16 @@ router.get('/me', authenticate, async (req, res) => {
     const user = await User.findById({ _id: userId }, { email: 1, _id: 0 });
 
     res.json({
-      title: 'Authentication successful',
-      detail: 'Successfully authenticated user',
+      title: 'Autenticacion Exitosa',
+      detail: 'Usuario Autenticado',
       user,
     });
   } catch (err) {
     res.status(401).json({
       errors: [
         {
-          title: 'Unauthorized',
-          detail: 'Not authorized to access this route',
+          title: 'Sin autorizacion',
+          detail: 'No tienes acceso',
           errorMessage: err.message,
         },
       ],
@@ -157,15 +157,15 @@ router.delete('/me', authenticate, csrfCheck, async (req, res) => {
     res.clearCookie('token');
     await User.findByIdAndDelete({ _id: userId });
     res.json({
-      title: 'Account Deleted',
-      detail: 'Account with credentials provided has been successfuly deleted',
+      title: 'Cuenta eliminada',
+      detail: 'La cuenta ha sido eliminada',
     });
   } catch (err) {
     res.status(401).json({
       errors: [
         {
-          title: 'Invalid Credentials',
-          detail: 'Check email and password combination',
+          title: 'Credenciales Incorrectas',
+          detail: 'Verifica el email y que la contraseña sean correctas',
           errorMessage: err.message,
         },
       ],
@@ -180,15 +180,15 @@ router.put('/logout', authenticate, csrfCheck, async (req, res) => {
     res.clearCookie('token');
 
     res.json({
-      title: 'Logout Successful',
-      detail: 'Successfuly expired login session',
+      title: 'Cierre de sesion exitoso',
+      detail: 'Tu sesion ha expirado',
     });
   } catch (err) {
     res.status(400).json({
       errors: [
         {
-          title: 'Logout Failed',
-          detail: 'Something went wrong during the logout process.',
+          title: 'Ocurrio un error',
+          detail: 'Algo ocurrio durante el proceso',
           errorMessage: err.message,
         },
       ],
