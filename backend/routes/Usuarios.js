@@ -1,22 +1,34 @@
 const router = require('express').Router();
 const UserModel = require('../models/UsuarioModel');
+const bcrypt=require('bcrypt');
 
+//posteo de datos con encriptacion y validacion 
 router.post('/', async(req, res)=>{
     let usuario = await UserModel.findOne({nombre: req.body.nombre})
     if(usuario)return res.status(400).send('')
+
+    const salt=await bcrypt.genSalt(10)
+    const passcifrado= await bcrypt.hash(req.body.password,salt)
 
         usuario = new UserModel({
             nombre: req.body.nombre,
             apellidoP: req.body.apellidoP,
             apellidoM: req.body.apellidoM,
             correo: req.body.correo,
-            password: req.body.password,
+<<<<<<< HEAD
+        
+=======
+            password:passcifrado,
+>>>>>>> be9bdab35973c2bf20068cb5d023d181ef2a8826
             type: req.body.type
         })
         const result = await usuario.save();
         res.status(201).send('Usuario Registrado');
-});
 
+
+        
+});
+//LLAMADA DE DATOS 
 router.get('/', async(req, res)=>{
     await UsuarioModel.find()
     .then(result =>{
@@ -26,15 +38,18 @@ router.get('/', async(req, res)=>{
     })
     .catch(err => res.json({success: false, result: err}));
 });
-
+//MODIFICAR POR ID
 router.put('/', async (req, res)=>{
+
+    const salt=await bcrypt.genSalt(10)
+    const passcifrado= await bcrypt.hash(req.body.password,salt)
 
     const user = await UsuarioModel.findByIdAndUpdate(req.params.id,{
         nombre: req.body.nombre,
         apellidoP: req.body.apellidoP,
         apellidoM: req.body.apellidoM,
         correo: req.body.correo,
-        password: req.body.password,
+        password:passcifrado,
         type: req.body.type
     },
     {
@@ -45,7 +60,7 @@ router.put('/', async (req, res)=>{
     }
     res.status(204).send()
 });
-
+  //borrar
 router.delete('/:id', async (req, res) =>{
     const user = await UsuarioModel.findOneAndDelete(req.params.id)
 
