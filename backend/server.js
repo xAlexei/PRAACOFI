@@ -1,12 +1,16 @@
 const express = require('express'); 
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const citas = require('./routes/Citas');
 const user = require('./routes/Usuarios');
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(express.json());
 app.use('/api/citas', citas);
 app.use('/api/usuarios',user);

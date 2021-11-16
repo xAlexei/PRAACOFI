@@ -1,14 +1,44 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
+const bcrypt = require('bcryptjs');
 
-const UsuarioSchema = new Schema(
-    {
-        nombre: String,
-        apellidoP: String,
-        apellidoM: String,
-        correo: String,
-        password: String,
-        type: String
-    });
+const UserSchema = new mongoose.Schema({
+  nombre: String,
+  apellidoP: String,
+  apellidoM: String,
+  email: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+  },
+});
 
-    module.exports = mongoose.model('usuarios', UsuarioSchema); 
+UserSchema.plugin(uniqueValidator);
+
+UserSchema.pre('save', function(next) {
+  let user = this;
+
+  if (!user.isModified('password')) {
+    return next();
+  }
+
+  bcrypt
+    .genSalt(12)
+    .then((salt) => {
+      return bcrypt.hash(user.password, salt);
+    })
+    .then((hash) => {
+      user.password = hash;
+      next();
+    })
+    .catch((err) => next(err));
+});
+
+module.exports = mongoose.model('User', UserSchema);

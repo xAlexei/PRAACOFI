@@ -1,61 +1,199 @@
-const router = require('express').Router();
-const UserModel = require('../models/UsuarioModel');
+const express = require('express');
+const bcrypt = require('bcryptjs');
 
-//posteo de datos con encriptacion y validacion 
-router.post('/', async(req, res)=>{
-    let usuario = await UserModel.findOne({nombre: req.body.nombre})
-    if(usuario)return res.status(400).send('')
+const User = require('../models/UsuarioModel');
+const Session = require('../models/session');
+const { authenticate } = require('../middleware/authenticate');
+const { csrfCheck } = require('../middleware/csrfCheck');
+const { initSession, isEmail } = require('../utils/utils');
 
-        usuario = new UserModel({
-            nombre: req.body.nombre,
-            apellidoP: req.body.apellidoP,
-            apellidoM: req.body.apellidoM,
-            correo: req.body.correo,
-            password: req.body.password,
-            type: req.body.type
-        })
-        const result = await usuario.save();
-        res.status(201).send('Usuario Registrado');
-});
+const router = express.Router();
 
-//LLAMADA DE DATOS 
-router.get('/', async(req, res)=>{
-    await UserModel.find()
-    .then(result =>{
-        if(!result) res.json({ success: false, result: 'No se encuentran registros'});
-
-        res.json({ success: true, result: result});
-    })
-    .catch(err => res.json({success: false, result: err}));
-});
-//MODIFICAR POR ID
-router.put('/', async (req, res)=>{
-
-
-    const user = await UserModel.findByIdAndUpdate(req.params.id,{
+router.post('/register', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!isEmail(email)) {
+      throw new Error('Tienes que poner una direccion de Email valida');
+    }
+    if (typeof password !== 'string') {
+      throw new Error('La constrseña debe contener letras');
+    }
+    const user = new User({ 
         nombre: req.body.nombre,
         apellidoP: req.body.apellidoP,
         apellidoM: req.body.apellidoM,
-        correo: req.body.correo,
-        password: req.body.password,  
-        type: req.body.type
-    },
-    {
-        new: true
-    })
-    if(!user){
-        return res.status(404).send('No existe');
-    }
-    res.status(204).send()
-});
-  //borrar
-router.delete('/:id', async (req, res) =>{
-    const user = await UserModel.findOneAndDelete(req.params.id)
+        email, 
+        password });
+    const persistedUser = await user.save();
+    const userId = persistedUser._id;
 
-    if(!user){
-        return res.status(404).send('El usuario con este ID no existe');
+    const session = await initSession(userId);
+
+    res
+      .cookie('token', session.token, {
+        httpOnly: true,
+        sameSite: true,
+        maxAge: 1209600000,
+        secure: process.env.NODE_ENV === 'production',
+      })
+      .status(201)
+      .json({
+        title: 'Usuario registrado con exito',
+        detail: 'Usuario registrado con exito',
+        csrfToken: session.csrfToken,
+      });
+  } catch (err) {
+    res.status(400).json({
+      errors: [
+        {
+          title: 'Ocurrio un error el registro',
+          detail: 'Algo salio durante el registro',
+          errorMessage: err.message,
+        },
+      ],
+    });
+  }
+});
+
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!isEmail(email)) {
+      return res.status(400).json({
+        errors: [
+          {
+            title: 'Bad Request',
+            detail: 'Email must be a valid email address',
+          },
+        ],
+      });
     }
-    res.status(200).send('El usuario ha sido eliminado');
+    if (typeof password !== 'string') {
+      return res.status(400).json({
+        errors: [
+          {
+            title: 'Bad Request',
+            detail: 'Password must be a string',
+          },
+        ],
+      });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error();
+    }
+    const userId = user._id;
+
+    const passwordValidated = await bcrypt.compare(password, user.password);
+    if (!passwordValidated) {
+      throw new Error();
+    }
+
+    const session = await initSession(userId);
+
+    res
+      .cookie('token', session.token, {
+        httpOnly: true,
+        sameSite: true,
+        maxAge: 1209600000,
+        secure: process.env.NODE_ENV === 'production',
+      })
+      .json({
+        title: 'Login Successful',
+        detail: 'Successfully validated user credentials',
+        csrfToken: session.csrfToken,
+      });
+  } catch (err) {
+    res.status(401).json({
+      errors: [
+        {
+          title: 'Invalid Credentials',
+          detail: 'Check email and password combination',
+          errorMessage: err.message,
+        },
+      ],
+    });
+  }
+});
+
+router.get('/me', authenticate, async (req, res) => {
+  try {
+    const { userId } = req.session;
+    const user = await User.findById({ _id: userId }, { email: 1, _id: 0 });
+
+    res.json({
+      title: 'Authentication successful',
+      detail: 'Successfully authenticated user',
+      user,
+    });
+  } catch (err) {
+    res.status(401).json({
+      errors: [
+        {
+          title: 'Unauthorized',
+          detail: 'Not authorized to access this route',
+          errorMessage: err.message,
+        },
+      ],
+    });
+  }
+});
+
+router.delete('/me', authenticate, csrfCheck, async (req, res) => {
+  try {
+    const { userId } = req.session;
+    const { password } = req.body;
+    if (typeof password !== 'string') {
+      throw new Error();
+    }
+    const user = await User.findById({ _id: userId });
+
+    const passwordValidated = await bcrypt.compare(password, user.password);
+    if (!passwordValidated) {
+      throw new Error();
+    }
+
+    await Session.expireAllTokensForUser(userId);
+    res.clearCookie('token');
+    await User.findByIdAndDelete({ _id: userId });
+    res.json({
+      title: 'Account Deleted',
+      detail: 'Account with credentials provided has been successfuly deleted',
+    });
+  } catch (err) {
+    res.status(401).json({
+      errors: [
+        {
+          title: 'Invalid Credentials',
+          detail: 'Check email and password combination',
+          errorMessage: err.message,
+        },
+      ],
+    });
+  }
+});
+
+router.put('/logout', authenticate, csrfCheck, async (req, res) => {
+  try {
+    const { session } = req;
+    await session.expireToken(session.token);
+    res.clearCookie('token');
+
+    res.json({
+      title: 'Logout Successful',
+      detail: 'Successfuly expired login session',
+    });
+  } catch (err) {
+    res.status(400).json({
+      errors: [
+        {
+          title: 'Logout Failed',
+          detail: 'Something went wrong during the logout process.',
+          errorMessage: err.message,
+        },
+      ],
+    });
+  }
 });
 
 module.exports = router;
