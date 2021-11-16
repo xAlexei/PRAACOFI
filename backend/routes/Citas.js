@@ -5,7 +5,7 @@ router.post('/', async(req, res)=>{
     let citas = await CitasModel.findOne({nombre: req.body.nombre})
     if(citas)return res.status(400).send('');
 
-        citas = new CitasMOdel({
+        citas = new CitasModel({
             nombre: req.body.nombre,
             apellidoP: req.body.apellidoP,
             apellidoM: req.body.apellidoM,
@@ -51,4 +51,6 @@ router.delete('/:id', async (req, res)=>{
         return res.status(404).send('Registro no encontrado');
     }
     res.status(200).send('La cita ha sido eliminado')
-})
+});
+
+module.exports = router;

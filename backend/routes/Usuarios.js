@@ -1,21 +1,23 @@
 const router = require('express').Router();
 const UserModel = require('../models/UsuarioModel');
-const bcrypt=require('bcrypt');
+const bcrypt = require('bcrypt');
+
 
 //posteo de datos con encriptacion y validacion 
 router.post('/', async(req, res)=>{
     let usuario = await UserModel.findOne({nombre: req.body.nombre})
     if(usuario)return res.status(400).send('')
-
+    
     const salt=await bcrypt.genSalt(10)
     const passcifrado= await bcrypt.hash(req.body.password,salt)
+
 
         usuario = new UserModel({
             nombre: req.body.nombre,
             apellidoP: req.body.apellidoP,
             apellidoM: req.body.apellidoM,
             correo: req.body.correo,
-            password:passcifrado,
+            password: passcifrado,
             type: req.body.type
         })
         const result = await usuario.save();
@@ -45,7 +47,7 @@ router.put('/', async (req, res)=>{
         apellidoP: req.body.apellidoP,
         apellidoM: req.body.apellidoM,
         correo: req.body.correo,
-        password:passcifrado,
+        password: passcifrado,  
         type: req.body.type
     },
     {
@@ -67,4 +69,3 @@ router.delete('/:id', async (req, res) =>{
 });
 
 module.exports = router;
-
