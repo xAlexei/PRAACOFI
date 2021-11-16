@@ -2,6 +2,7 @@ const router = require('express').Router();
 const UsuarioModel = require('../models/UsuarioModel');
 const UserModel = require('../models/UsuarioModel');
 
+//posteo de datos con encriptacion y validacion 
 router.post('/', async(req, res)=>{
     let usuario = await UserModel.findOne({nombre: req.body.nombre})
     if(usuario)return res.status(400).send('')
@@ -17,7 +18,7 @@ router.post('/', async(req, res)=>{
         const result = await usuario.save();
         res.status(201).send('Usuario Registrado');
 });
-
+//LLAMADA DE DATOS 
 router.get('/', async(req, res)=>{
     await UsuarioModel.find()
     .then(result =>{
@@ -27,7 +28,7 @@ router.get('/', async(req, res)=>{
     })
     .catch(err => res.json({success: false, result: err}));
 });
-
+//MODIFICAR POR ID
 router.put('/', async (req, res)=>{
 
     const user = await UsuarioModel.findByIdAndUpdate(req.params.id,{
@@ -46,7 +47,7 @@ router.put('/', async (req, res)=>{
     }
     res.status(204).send()
 });
-
+  //borrar
 router.delete('/:id', async (req, res) =>{
     const user = await UsuarioModel.findOneAndDelete(req.params.id)
 
