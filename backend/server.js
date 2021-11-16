@@ -19,7 +19,7 @@ app.listen(3000, ()=>{
 
 //Conexion
 
-mongoose.connect('mongodb+srv://xAlexei:Palacios12@cluster0.66sqe.mongodb.net/test',{useNewUrlParser:true,useUnifiedTopology: true, useFindAndModify: false, useCreateIndex:true})
+mongoose.connect('mongodb+srv://xAlexei:<password>@cluster0.66sqe.mongodb.net/PRAACOFI?retryWrites=true&w=majority',{useNewUrlParser:true,useUnifiedTopology: true, useFindAndModify: false, useCreateIndex:true})
 .then(()=>console.log('Conectado'))
 .catch(()=>console.log('No se pudo establecer la conexion'));
 
