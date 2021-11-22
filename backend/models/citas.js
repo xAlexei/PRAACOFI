@@ -3,10 +3,9 @@ const Schema = mongoose.Schema;
 
 const CitasSchema = new Schema({
     nombre: String,
-    apellidoP: String,
-    apellidoM: String,
+    apellidos: String,
     motivo: String,
-    RFC: String
+    rfc: String
 });
 
 module.exports = mongoose.model('citas', CitasSchema);
