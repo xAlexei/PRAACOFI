@@ -13,7 +13,7 @@ router.post('/', async(req, res)=>{
             RFC: req.body.RFC
         })
         const result = await citas.save();
-        res.status(201).send('Citas Rigistrada');
+        res.status(201).send('Cita Rigistrada');
 
 });
 
@@ -23,8 +23,7 @@ router.get('/', async(req, res)=>{
         if(!result) res.json({ succes: false, result: 'No se encontraron registros'});
 
         res.json({ succes: true, result: result});
-    })
-    .catch(err => res.json({succes: false, result: err}));
+    }).catch(err => res.json({succes: false, result: err}));
 });
 
 router.put('/', async(req, res)=>{
