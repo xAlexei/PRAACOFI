@@ -17,9 +17,12 @@ app.use(require('./routes/index'));
 
 
 var corsOptions = {
-  origin: "http://localhost:3001"
+  origin: "http://localhost:3001/"
 };
 app.use(cors(corsOptions));
+// app.use(cors());
+// app.use(cors("*"));
+// app.use(cors(options => options.AllowAnyOrigin()));
 
 let renderHTML = path.resolve(__dirname, '../public/index.html');
 

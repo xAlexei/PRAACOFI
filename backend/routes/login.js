@@ -5,6 +5,9 @@ const Usuario = require('./../models/usuario');
 const app = express();
 
 app.post('/login', function (req, res) {
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
     let body = req.body;
 
