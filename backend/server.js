@@ -5,6 +5,7 @@ const app = express()
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const path = require('path');
+const cors = require("cors")
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -14,7 +15,14 @@ app.use(bodyParser.json())
 // Configuracion global de rutas
 app.use(require('./routes/index'));
 
+
+var corsOptions = {
+  origin: "http://localhost:3001"
+};
+app.use(cors(corsOptions));
+
 let renderHTML = path.resolve(__dirname, '../public/index.html');
+
 
 app.get('/', function (req, res) {
   res.sendFile(renderHTML);
