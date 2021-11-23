@@ -9,6 +9,9 @@ router.post('/registro_cita', async(req, res)=>{
             nombre: req.body.nombre,
             apellidos: req.body.apellidos,
             motivo: req.body.motivo,
+            fecha_cita: req.body.fecha_cita,
+            hora: req.body.hora,
+            area: req.body.area,
             rfc: req.body.rfc
         })
         citas.save();
@@ -25,12 +28,15 @@ router.get('/mostrar_citas', async(req, res)=>{
     }).catch(err => res.json({succes: false, result: err}));
 });
 
+
 router.put('/:id', async (req, res) => {
 
     const citas = await CitasModel.findByIdAndUpdate(req.params.id,{
         nombre: req.body.nombre,
         apellidos: req.body.apellidos,
-        motivo: req.nombre.motivo,
+        motivo: req.body.motivo,
+        fecha_cita: req.body.fecha_cita,
+        area: req.body.area,
         rfc: req.body.nombre.rfc
 
     },
@@ -41,6 +47,14 @@ router.put('/:id', async (req, res) => {
         return res.status(404).send('No existe');
     }
     res.status(204).send()
+});
+
+router.delete('/:id', async (req, res)=>{
+    const citas = await CitasModel.findOneAndDelete(req.params.id)
+    if(!citas){
+        return res.status(404).send('Registro no encontrado');
+    }
+    res.status(200).send('La cita ha sido eliminada');
 });
 
 module.exports = router;

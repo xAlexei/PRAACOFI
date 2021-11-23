@@ -26,5 +26,24 @@ app.post('/register', function (req, res) {
       })
   });
 
+  app.get('/mostrar_usuarios', async(req, res)=>{
+    await Usuario.find()
+    .then(result =>{
+        if(!result) res.json({ succes: false, result: 'No se encontraron registros'});
+
+        res.json({ succes: true, result: result});
+    }).catch(err => res.json({succes: false, result: err}));
+});
+
+
+  app.delete('/:id', async (req, res)=>{
+    const user = await Usuario.findOneAndDelete(req.params.id)
+    if(!user){
+        return res.status(404).send('Registro no encontrado');
+    }
+    res.status(200).send('El usuario ha sido eliminado');
+});
+
+
   
   module.exports = app;
