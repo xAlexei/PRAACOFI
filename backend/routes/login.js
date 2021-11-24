@@ -19,7 +19,6 @@ app.post('/login', function (req, res) {
             })
         }
     
-
         // Verifica que exista un usuario con el mail escrita por el usuario.
         if (!usuarioDB) {
             return res.status(400).json({
