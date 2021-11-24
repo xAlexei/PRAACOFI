@@ -13,7 +13,6 @@ router.post('/registro_cita', async(req, res)=>{
             usuario: req.body.usuario,
             motivo: req.body.motivo,
             fecha_cita: req.body.fecha_cita,
-            hora: req.body.hora,
             area: req.body.area,
             rfc: req.body.rfc
         })
