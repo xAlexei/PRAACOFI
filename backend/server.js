@@ -15,17 +15,7 @@ app.use(bodyParser.json())
 // Configuracion global de rutas
 app.use(require('./routes/index'));
 
-
-var corsOptions = {
-  origin: "http://localhost:3001/"
-};
-app.use(cors(corsOptions));
-// app.use(cors());
-// app.use(cors("*"));
-// app.use(cors(options => options.AllowAnyOrigin()));
-
 let renderHTML = path.resolve(__dirname, '../public/index.html');
-
 
 app.get('/', function (req, res) {
   res.sendFile(renderHTML);
@@ -39,7 +29,6 @@ mongoose.connect(process.env.URLDB, {
   if (err) throw err;
   console.log("Base de datos online");
 });
-
 
 app.listen(process.env.PORT, ()=> {
     console.log("Escuchando en puerto 3000");

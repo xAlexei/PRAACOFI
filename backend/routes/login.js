@@ -6,9 +6,6 @@ const Contador = require('./../models/contador');
 const app = express();
 
 app.post('/login', function (req, res) {
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
     res.header("Access-Control-Allow-Origin", "*");
     let body = req.body;
@@ -60,7 +57,6 @@ app.post('/login', function (req, res) {
 
 
 });
-
 
 
 app.post('/loginc', function (req, res) {
