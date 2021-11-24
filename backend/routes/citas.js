@@ -22,6 +22,14 @@ router.post('/registro_cita', async(req, res)=>{
 
 });
 
+//Get motivos
+
+router.get('/motivos', function(req, res){
+    citas.find({ motivo }, function(err, motivo){
+        res.status(200).send(motivo);
+    })
+});
+
 
 //Get all appointment
 

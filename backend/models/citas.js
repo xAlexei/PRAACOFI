@@ -5,8 +5,8 @@ const Usuario = mongoose.model('Usuario');
 const CitasSchema = new Schema({
     usuario: { type: Schema.ObjectId, ref: 'Usuario'},
     motivo: String,
-    fecha_cita: String,
-    hora: String,
+    fecha_cita: Date,
+    hora: Date,
     area: String,
     rfc: String,
 });
