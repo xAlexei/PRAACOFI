@@ -48,7 +48,9 @@ app.post('/login', function (req, res) {
         res.json({
             ok: true,
             usuario: usuarioDB,
+            id: usuarioDB.id,
             token,
+            
         })
 
     })
@@ -110,6 +112,8 @@ app.post('/loginc', function (req, res) {
 
 
 });
+
+
 
 
 module.exports = app;

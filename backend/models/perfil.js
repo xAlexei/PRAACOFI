@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const usuario = require('./usuario');
+const Usuario = mongoose.model('Usuario');
 const Schema = mongoose.Schema;
 
 const PerfilSchema = new Schema({
@@ -9,7 +11,8 @@ const PerfilSchema = new Schema({
         pais: String,
         cp: Number,
         telefono: Number,
-        ocupacion: String
+        ocupacion: String,
+        usuario: {type: Schema.ObjectId, ref: 'Usuario'}
 });
 
 module.exports = mongoose.model('perfil', PerfilSchema);
