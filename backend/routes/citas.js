@@ -36,6 +36,7 @@ router.put('/:id', async (req, res) => {
         apellidos: req.body.apellidos,
         motivo: req.body.motivo,
         fecha_cita: req.body.fecha_cita,
+        hora: req.body.hora,
         area: req.body.area,
         rfc: req.body.nombre.rfc
 

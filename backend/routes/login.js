@@ -2,19 +2,26 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('./../models/usuario');
+const Contador = require('./../models/contador');
 const app = express();
 
 app.post('/login', function (req, res) {
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
+    res.header("Access-Control-Allow-Origin", "*");
     let body = req.body;
 
     Usuario.findOne({ email: body.email }, (erro, usuarioDB)=>{
         if (erro) {
             return res.status(500).json({
                 ok: false,
+                role: rolesValidos,
                 err: erro
             })
         }
+    
 
         // Verifica que exista un usuario con el mail escrita por el usuario.
         if (!usuarioDB) {
@@ -31,7 +38,7 @@ app.post('/login', function (req, res) {
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: "Usuario o contraseña incorrectos"
+                    message: "Contraseña incorrecta"
                 }
             });
         }
@@ -51,7 +58,65 @@ app.post('/login', function (req, res) {
 
     })
 
+
 });
+
+
+
+app.post('/loginc', function (req, res) {
+
+    res.header("Access-Control-Allow-Origin", "*");
+    let body = req.body;
+
+        Contador.findOne({ email: body.email }, (erro, usuarioDB)=>{
+        if (erro) {
+            return res.status(500).json({
+                ok: false,
+                role: rolesValidos,
+                err: erro
+            })
+        }
+
+        // Verifica que exista un usuario con el mail escrita por el usuario.
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "Usuario o contraseña incorrectos"
+                }
+            })
+        } 
+
+        // Valida que la contraseña escrita por el usuario, sea la almacenada en la db
+        if (! bcrypt.compareSync(body.password, usuarioDB.password)){
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "Contraseña incorrecta"
+                }
+            });
+        }
+
+        // Genera el token de autenticación
+        let token = jwt.sign({
+            usuario: usuarioDB,
+        }, process.env.SEED_AUTENTICACION, {
+            expiresIn: process.env.CADUCIDAD_TOKEN
+        })
+
+        res.json({
+            ok: true,
+            usuario: usuarioDB,
+            token,
+        })
+
+    })
+
+
+
+
+});
+
 
 module.exports = app;
 

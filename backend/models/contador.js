@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
 let rolesValidos = {
-    values: ["ADMIN", "USER"],
+    values: ["CONTADOR"],
     message: '{VALUE} no es un role válido'
 }
 
 let Schema = mongoose.Schema;
 
-let usuarioSchema = new Schema({
+let contadorSchema = new Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario'],
@@ -24,14 +24,14 @@ let usuarioSchema = new Schema({
     },
     role: {
         type: String,
-        default: 'USER',
+        default: 'CONTADOR',
         required: [true],
         enum: rolesValidos,
     },
 });
 
-// elimina la key password del objeto que retorna al momento de crear un usuario
-usuarioSchema.methods.toJSON = function() {
+// elimina la key password del objeto que retorna al momento de crear un contador
+contadorSchema.methods.toJSON = function() {
     let user = this;
     let userObject = user.toObject();
     delete userObject.password;
@@ -39,8 +39,9 @@ usuarioSchema.methods.toJSON = function() {
     return userObject;
 }
 
-usuarioSchema.plugin(uniqueValidator, {
+contadorSchema.plugin(uniqueValidator, {
     message: '{PATH} debe de ser único'
 })
 
-module.exports = mongoose.model('Usuario', usuarioSchema)
+module.exports = mongoose.model('Contador', contadorSchema)
+

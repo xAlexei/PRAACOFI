@@ -5,8 +5,8 @@ const CitasSchema = new Schema({
     nombre: String,
     apellidos: String,
     motivo: String,
-    fecha_cita: String,
-    hora: String,
+    fecha_cita: Date,
+    hora: Number,
     area: String,
     rfc: String
 });
