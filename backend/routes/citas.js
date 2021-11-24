@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const CitasModel = require('../models/citas');
 
+//Create appointment
+
 router.post('/registro_cita', async(req, res)=>{
     let citas = await CitasModel.findOne({nombre: req.body.nombre})
     if(citas)return res.status(400).send('');
@@ -19,6 +21,8 @@ router.post('/registro_cita', async(req, res)=>{
 
 });
 
+//Get all appointments
+
 router.get('/mostrar_citas', async(req, res)=>{
     await CitasModel.find()
     .then(result =>{
@@ -27,6 +31,7 @@ router.get('/mostrar_citas', async(req, res)=>{
         res.json({ succes: true, result: result});
     }).catch(err => res.json({succes: false, result: err}));
 });
+
 
 
 router.put('/:id', async (req, res) => {
@@ -39,8 +44,7 @@ router.put('/:id', async (req, res) => {
         hora: req.body.hora,
         area: req.body.area,
         rfc: req.body.nombre.rfc
-
-    },
+        },
     {
         new: true
     })

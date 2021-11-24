@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const Usuario = require("./../models/usuario");
 const app = express();
 
+//Create user
+
 app.post("/register", function (req, res) {
   res.header("Access-Control-Allow-Origin", "*");
 
@@ -29,6 +31,8 @@ app.post("/register", function (req, res) {
   });
 });
 
+//Get all users
+
 app.get("/mostrar_usuarios", async (req, res) => {
   await Usuario.find()
     .then((result) => {
@@ -39,6 +43,22 @@ app.get("/mostrar_usuarios", async (req, res) => {
     })
     .catch((err) => res.json({ succes: false, result: err }));
 });
+
+
+//Get an user with specific ID
+
+app.get('/user/:id', async (req, res)=>{
+    await Usuario.findOne()
+    .then((result)=>{
+      if(!result)
+        res.json({succes: false, result: "No se econtro el usuario"});
+
+        res.json({ succes: true, result: result});
+    })
+    .catch((err)=> res.json({succes: false, result: err}));
+});
+
+//Delete user 
 
 app.delete("/:id", async (req, res) => {
   const user = await Usuario.findOneAndDelete(req.params.id);
