@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('./../models/usuario');
-const Contador = require('./../models/contador');
 const app = express();
 
 app.post('/login', function (req, res) {

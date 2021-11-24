@@ -6,7 +6,7 @@ const CitasSchema = new Schema({
     apellidos: String,
     motivo: String,
     fecha_cita: Date,
-    hora: DateTime,
+    hora: Date,
     area: String,
     rfc: String
 });
