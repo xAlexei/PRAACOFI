@@ -5,9 +5,15 @@ const app = express()
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const path = require('path');
-const cors = require("cors")
+const cors = require("cors");
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+
+// CORS
+var corsOptions = {
+  origin: "http://localhost:3000"
+};
+app.use(cors(corsOptions));
 
 // parse application/json
 app.use(bodyParser.json())
@@ -20,8 +26,8 @@ let renderHTML = path.resolve(__dirname, '../public/index.html');
 app.get('/', function (req, res) {
   res.sendFile(renderHTML);
 })
- 
- 
+
+
 mongoose.connect(process.env.URLDB, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -30,6 +36,6 @@ mongoose.connect(process.env.URLDB, {
   console.log("Base de datos online");
 });
 
-app.listen(process.env.PORT, ()=> {
-    console.log("Escuchando en puerto 3000");
+app.listen(process.env.PORT, () => {
+  console.log("Escuchando en puerto 3000");
 })
