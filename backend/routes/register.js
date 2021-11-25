@@ -45,8 +45,6 @@ app.get("/mostrar_usuarios", async (req, res) => {
 });
 
 
-//Get an user with specific ID
-
  //Get one 
 
  app.get('/user/:id', async (req, res)=>{
@@ -60,12 +58,12 @@ app.get("/mostrar_usuarios", async (req, res) => {
 
 //Delete user 
 
-app.delete("/:id", async (req, res) => {
-  const user = await Usuario.findOneAndDelete(req.params.id);
-  if (!user) {
-    return res.status(404).send("Registro no encontrado");
-  }
-  res.status(200).send("El usuario ha sido eliminado");
+app.delete("/user/:id", (req, res) => {
+  const { id } = req.params;
+  Usuario
+    .remove({ _id: id })
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }));
 });
 
 module.exports = app;

@@ -67,12 +67,12 @@ router.put('/modificar_cita/:id', async (req, res) => {
 
 //Delete 
 
-router.delete('/clear/:id', async (req, res)=>{
-    const citas = await CitasModel.findOneAndDelete(req.params.id)
-    if(!citas){
-        return res.status(404).send('Registro no encontrado');
-    }
-    res.status(200).send('La cita ha sido eliminada');
+router.delete("/citas/:id", (req, res) => {
+  const { id } = req.params;
+  CitasModel
+    .remove({ _id: id })
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }));
 });
 
 module.exports = router;
