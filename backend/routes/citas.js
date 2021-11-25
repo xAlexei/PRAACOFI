@@ -24,11 +24,7 @@ router.post('/registro_cita', async(req, res)=>{
 
 //Get motivos
 
-router.get('/motivos', async(req, res)=>{
-    const citas = await CitasModel.find().select('motivo');
-    const [_id, ...data] = citas;
-    return res.status(201).send(data);
-});
+
 
   //Get one 
 

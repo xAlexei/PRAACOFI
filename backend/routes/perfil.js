@@ -5,7 +5,7 @@ const usuario = require('../models/usuario');
 
 router.post('/perfil', async(req, res)=>{
     let perfil = await PerfilModel.findOne({usuario: req.body.usuario})
-    if(!perfil)return res.status(400).send('');
+    //if(!perfil)return res.status(400).send('');
 
     perfil = new PerfilModel({
         nombre: req.body.nombre,

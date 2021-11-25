@@ -5,4 +5,5 @@ app.use(require('./login'));
 app.use(require('./register'));
 app.use(require('./citas'));
 app.use(require('./perfil'));
+app.use(require('./motivos'));
 module.exports = app;
