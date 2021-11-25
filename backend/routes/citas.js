@@ -13,6 +13,7 @@ router.post('/registro_cita', async(req, res)=>{
             usuario: req.body.usuario,
             motivo: req.body.motivo,
             fecha_cita: req.body.fecha_cita,
+            hora: req.bodu.hora,
             area: req.body.area,
             rfc: req.body.rfc
         })
@@ -23,11 +24,14 @@ router.post('/registro_cita', async(req, res)=>{
 
 //Get motivos
 
-router.get('/motivos', function(req, res){
-    citas.find({ motivo }, function(err, motivo){
-        res.status(200).send(motivo);
-    })
+router.get('/motivos', async(req, res)=>{
+    const citas = await CitasModel.find().select('motivo');
+    const {_id, ...data} = citas;
+    return res.status(201).send(data);
 });
+
+
+
 
 
 //Get all appointment
@@ -39,6 +43,7 @@ router.get('/motivos', function(req, res){
       });
     });
   });
+
 
   //Get one 
 
