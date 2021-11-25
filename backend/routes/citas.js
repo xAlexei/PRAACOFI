@@ -30,6 +30,24 @@ router.get('/motivos', async(req, res)=>{
     return res.status(201).send(data);
 });
 
+router.put('/modificar_cita/:id', async (req, res) => {
+
+  const citas = await CitasModel.findByIdAndUpdate(req.params.id,{
+      motivo: req.body.motivo,
+      fecha_cita: req.body.fecha_cita,
+      hora: req.body.hora,
+      area: req.body.area,
+      rfc: req.body.rfc
+  },
+  {
+      new: true
+  })
+  if(!citas){
+      return res.status(404).send('No existe');
+  }
+  res.status(204).send(citas);
+});
+
 
 
 
