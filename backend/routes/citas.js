@@ -7,13 +7,13 @@ const usuario = require('../models/usuario');
 
 router.post('/registro_cita', async(req, res)=>{
     let citas = await CitasModel.findOne({usuario: req.body.usuario})
-    if(!citas)return res.status(400).send('');
+    // if(!citas)return res.status(400).send('');
 
         citas = new CitasModel({
             usuario: req.body.usuario,
             motivo: req.body.motivo,
             fecha_cita: req.body.fecha_cita,
-            hora: req.bodu.hora,
+            hora: req.body.hora,
             area: req.body.area,
             rfc: req.body.rfc
         })
