@@ -30,6 +30,17 @@ router.get('/motivos', async(req, res)=>{
     return res.status(201).send(data);
 });
 
+  //Get one 
+
+  router.get('/citas/:id', async (req, res)=>{
+    const { id } = req.params;
+    CitasModel
+    .findById(id)
+    .then((data)=> res.json(data))
+    .catch((error) => res.json({ message: error}));
+});
+
+
 router.put('/modificar_cita/:id', async (req, res) => {
 
   const citas = await CitasModel.findByIdAndUpdate(req.params.id,{
@@ -48,10 +59,6 @@ router.put('/modificar_cita/:id', async (req, res) => {
   res.status(204).send(citas);
 });
 
-
-
-
-
 //Get all appointment
 
   router.get("/mostrar_citas", function (req, res) {
@@ -63,19 +70,7 @@ router.put('/modificar_cita/:id', async (req, res) => {
   });
 
 
-  //Get one 
 
- 
-router.get('/cita/:id', async (req, res)=>{
-    await CitasModel.findOne()
-    .then((result)=>{
-      if(!result)
-        res.json({succes: false, result: "No se econtro la cita"});
-
-        res.json({ succes: true, result: result});
-    })
-    .catch((err)=> res.json({succes: false, result: err}));
-});
 
 
 //Delete 

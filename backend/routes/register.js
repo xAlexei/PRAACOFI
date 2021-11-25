@@ -47,16 +47,16 @@ app.get("/mostrar_usuarios", async (req, res) => {
 
 //Get an user with specific ID
 
-app.get('/user/:id', async (req, res)=>{
-    await Usuario.findOne()
-    .then((result)=>{
-      if(!result)
-        res.json({succes: false, result: "No se econtro el usuario"});
+ //Get one 
 
-        res.json({ succes: true, result: result});
-    })
-    .catch((err)=> res.json({succes: false, result: err}));
+ app.get('/user/:id', async (req, res)=>{
+  const { id } = req.params;
+  Usuario
+  .findById(id)
+  .then((data)=> res.json(data))
+  .catch((error) => res.json({ message: error}));
 });
+
 
 //Delete user 
 

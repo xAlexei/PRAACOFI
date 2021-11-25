@@ -32,19 +32,14 @@ router.get("/mostrar_perfil", function (req, res) {
     });
   });
 
-
-
 //Get one profile
 
-router.get('/perfil/:id', async (req, res)=>{
-    await PerfilModel.findOne()
-    .then((result)=>{
-      if(!result)
-        res.json({succes: false, result: "No se econtro el perfil"});
-
-        res.json({ succes: true, result: result});
-    })
-    .catch((err)=> res.json({succes: false, result: err}));
+router.get('/user/:id', async (req, res)=>{
+  const { id } = req.params;
+  PerfilModel
+  .findById(id)
+  .then((data)=> res.json(data))
+  .catch((error) => res.json({ message: error}));
 });
 
 
