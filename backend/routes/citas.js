@@ -80,7 +80,7 @@ router.get('/cita/:id', async (req, res)=>{
 
 //Delete 
 
-router.delete('/:id', async (req, res)=>{
+router.delete('/clear:id', async (req, res)=>{
     const citas = await CitasModel.findOneAndDelete(req.params.id)
     if(!citas){
         return res.status(404).send('Registro no encontrado');
