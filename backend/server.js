@@ -10,7 +10,10 @@ const cors = require("cors");
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // CORS
-app.use(cors);
+var corsOptions = {
+  origin: "http://localhost:3000"
+};
+app.use(cors(corsOptions));
 
 // parse application/json
 app.use(bodyParser.json())
