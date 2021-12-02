@@ -6,4 +6,5 @@ app.use(require('./register'));
 app.use(require('./citas'));
 app.use(require('./perfil'));
 app.use(require('./motivos'));
+app.use(require('./area'));
 module.exports = app;
