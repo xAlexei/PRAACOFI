@@ -17,6 +17,7 @@
     "http-errors": "~1.6.3",
     "jade": "^0.29.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "mongoose": "^6.0.13",
     "mongoose-unique-validator": "^3.0.0",
     "morgan": "~1.9.1",

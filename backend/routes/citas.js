@@ -2,6 +2,7 @@ const router = require('express').Router();
 const citas = require('../models/citas');
 const CitasModel = require('../models/citas');
 const usuario = require('../models/usuario');
+const moment = require('moment');
 
 //Create appointment
 
@@ -21,10 +22,6 @@ router.post('/registro_cita', async(req, res)=>{
         res.status(201).send(citas);
 
 });
-
-//Get motivos
-
-
 
   //Get one 
 
