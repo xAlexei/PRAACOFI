@@ -56,15 +56,13 @@ router.put('/modificar_cita/:id', async (req, res) => {
 });
 
 //Get all appointment
-
-  router.get("/mostrar_citas", function (req, res) {
-    citas.find({}, function (err, citas) {
-      usuario.populate(citas, { path: "usuario" }, function (err, citas) {
-        res.status(200).send(citas);
-      });
-    });
-  });
-
+router.get("/mostrar_citas", (req, res) => {
+  CitasModel
+    .find()
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }));
+});
+  
 //Delete 
 
 router.delete("/citas/:id", (req, res) => {
